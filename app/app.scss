@@ -8,3 +8,116 @@
 
 // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
+
+.form-control {
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  border-width: 1;
+  border-color: #ced4da;
+  border-radius: 2;
+  width: 80%;
+  text-align: center;
+}
+
+.mb-1 {
+  margin-bottom: 10;
+}
+
+.mb-2 {
+  margin-bottom: 20;
+}
+
+.mb-3 {
+  margin-bottom: 30;
+}
+
+.mx-1 {
+  margin-right: 10;
+  margin-left: 10;
+}
+
+.mx-2 {
+  margin-right: 20;
+  margin-left: 20;
+}
+
+.mx-3 {
+  margin-right: 30;
+  margin-left: 30;
+}
+
+.my-1 {
+  margin-top: 10;
+  margin-bottom: 10;
+}
+
+.my-2 {
+  margin-top: 20;
+  margin-bottom: 20;
+}
+
+.my-3 {
+  margin-top: 30;
+  margin-bottom: 30;
+}
+
+.border-radius-1 {
+  border-radius: 10;
+}
+
+.border-radius-2 {
+  border-radius: 20;
+}
+
+.border-radius-3 {
+  border-radius: 30;
+}
+
+.h1 {
+  font-size: 35;
+  font-weight: bold;
+}
+
+.btn-fun {
+  background: linear-gradient(to right, #497dff, $purple);
+  width: 10;
+  border-radius: 25;
+  border-width: 0;
+  color: #ededed;
+  padding: 20;
+  font-weight: 900;
+}
+
+.card {
+  border-radius: 30;
+  padding: 30;
+}
+
+.bg-dark {
+  background-color: #2b314d;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-light {
+  color: #ededed;
+}
+
+.label {
+  color: #ededed;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12;
+  margin-bottom: 5
+}
+
+.input {
+  color: #ededed;
+  placeholder-color: #6f7583;
+  border-color: #ededed;
+  border-bottom-width: 2;
+  padding: 2;
+}
