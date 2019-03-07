@@ -1,6 +1,7 @@
 // NativeScript core theme
 // @see https://docs.nativescript.org/ui/theme
-@import '~nativescript-theme-core/scss/lime';
+
+@import '~nativescript-theme-core/scss/lemon';
 
 // Override variables here
 
@@ -8,6 +9,12 @@
 
 // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
+
+
+@import './styles/padding-margin.scss';
+@import './styles/typography.scss';
+@import './styles/font-awesome.css';
+
 
 .form-control {
   line-height: 1.5;
@@ -18,48 +25,6 @@
   border-radius: 2;
   width: 80%;
   text-align: center;
-}
-
-.mb-1 {
-  margin-bottom: 10;
-}
-
-.mb-2 {
-  margin-bottom: 20;
-}
-
-.mb-3 {
-  margin-bottom: 30;
-}
-
-.mx-1 {
-  margin-right: 10;
-  margin-left: 10;
-}
-
-.mx-2 {
-  margin-right: 20;
-  margin-left: 20;
-}
-
-.mx-3 {
-  margin-right: 30;
-  margin-left: 30;
-}
-
-.my-1 {
-  margin-top: 10;
-  margin-bottom: 10;
-}
-
-.my-2 {
-  margin-top: 20;
-  margin-bottom: 20;
-}
-
-.my-3 {
-  margin-top: 30;
-  margin-bottom: 30;
 }
 
 .border-radius-1 {
@@ -74,20 +39,28 @@
   border-radius: 30;
 }
 
-.h1 {
-  font-size: 35;
-  font-weight: bold;
+.bg-fun {
+  background: linear-gradient(to right, #497dff, $purple);
 }
 
 .btn-fun {
   background: linear-gradient(to right, #497dff, $purple);
-  width: 10;
+  width: 250;
   border-radius: 25;
   border-width: 0;
   color: #ededed;
-  padding: 20;
+  padding: 15;
   font-weight: 900;
 }
+
+.btn-sm {
+  width: 100;
+  border-radius: 25;
+  border-width: 0;
+  padding: 5;
+  margin: 5;
+}
+
 
 .card {
   border-radius: 30;
@@ -102,15 +75,49 @@
   text-align: center;
 }
 
+.text-primary {
+  color: #4db753
+}
+
+.text-secondary {
+  color: #497dff
+}
+
+.text-info {
+  color: #c60097
+}
+
+.text-danger {
+  color: #d1484f;
+}
+
 .text-light {
   color: #ededed;
+}
+
+.hatch {
+  color: #fcc944;
+}
+
+.cargo {
+  color: #ff8c3f;
+}
+
+.small {
+  font-size: 12;
+}
+
+.status {
+  font-size: 18;
+  font-weight: 700;
+  padding: 10;
 }
 
 .label {
   color: #ededed;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 12;
+  font-size: 14;
   margin-bottom: 5
 }
 
@@ -120,4 +127,45 @@
   border-color: #ededed;
   border-bottom-width: 2;
   padding: 2;
+}
+
+.text-monospace {
+  font-family: monospace;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+
+.blue-alliance {
+  background-color: #497dff;
+  border-radius: 25;
+  border-width: 0;
+  padding: 1;
+  margin: 5;
+  color: #ededed;
+  font-family: monospace;
+  text-align: center;
+  font-weight: 900;
+  width: auto;
+
+}
+
+.red-alliance {
+  background-color: #d1484f;
+  border-radius: 25;
+  border-width: 0;
+  padding: 1;
+  margin: 5;
+  color: #ededed;
+  font-family: monospace;
+  text-align: center;
+  font-weight: 900;
+  width: auto;
+
 }

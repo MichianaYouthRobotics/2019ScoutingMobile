@@ -1,49 +1,74 @@
 <template>
-    <Page>
-        <ActionBar title="Welcome to NativeScript-Vue!" android:flat="true"/>
-        <TabView android:tabBackgroundColor="#53ba82"
-                 android:tabTextColor="#c4ffdf"
-                 android:selectedTabTextColor="#ffffff"
-                 androidSelectedTabHighlightColor="#ffffff">
-            <TabViewItem title="Tab 1">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" :text="msg" col="0" row="0"/>
-                </GridLayout>
+    <Page class="bg-dark" statusBarStyle="dark">
+        <ActionBar :title="title">
+            <!--<ActionItem @tap="newScout"-->
+                        <!--ios.systemIcon="4" ios.position="right"-->
+                        <!--text="add" android.position="popup" />-->
+        </ActionBar>
+        <TabView tabBackgroundColor="#2b314d"
+                 tabTextColor="#cccccc"
+                 selectedTabTextColor="#ffffff"
+                 selectedTabBorderColor="#ffffff"
+                 selectedTabBorderWidth="3"
+                 selectedTabHighlightColor="#ffffff"
+                 @selectedIndexChange="indexChange">
+            <TabViewItem title="Scouting">
+                <Scouting class="bg-dark"></Scouting>
             </TabViewItem>
-            <TabViewItem title="Tab 2">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 2 Content" col="0" row="0"/>
-                </GridLayout>
+            <TabViewItem title="Robots">
+                <Robots></Robots>
             </TabViewItem>
-            <TabViewItem title="Tab 3">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 3 Content" col="0" row="0"/>
-                </GridLayout>
+            <TabViewItem title="Stats">
+                <Stats></Stats>
+            </TabViewItem>
+            <TabViewItem title="Settings">
+                <Settings></Settings>
             </TabViewItem>
         </TabView>
     </Page>
 </template>
 
-<script >
-  export default {
-    data() {
-      return {
-        msg: 'Hello World!'
-      }
+<script>
+    import Scouting from '@/views/tabs/Scouting'
+    import Stats from '@/views/tabs/Stats'
+    import Settings from '@/views/tabs/Settings'
+    import Robots from '@/views/tabs/Robots'
+
+
+    export default {
+        components: {Settings, Scouting, Stats, Robots},
+        data() {
+            return {
+                title: 'Scouting',
+            }
+        },
+        created() {
+            this.$store.dispatch('scouting/initializeState')
+        },
+        methods: {
+            indexChange (e) {
+                let newIndex = e.value;
+                if (newIndex === 0) {
+                    this.title = 'Scouting';
+                } else if (newIndex === 1) {
+                    this.title = 'Robots';
+                } else if (newIndex === 2) {
+                    this.title = 'Stats';
+                } else {
+                    this.title = 'Settings';
+                }
+            },
+        }
+
     }
-  }
 </script>
 
 <style scoped>
-    ActionBar {
-        background-color: #53ba82;
+    .action-bar {
         color: #ffffff;
     }
 
-    .message {
-        vertical-align: center;
-        text-align: center;
-        font-size: 20;
-        color: #333333;
+    .action-bar {
+        background-color: #ff0000;
     }
 </style>
