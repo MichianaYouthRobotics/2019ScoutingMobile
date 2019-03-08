@@ -12,9 +12,9 @@
                  selectedTabBorderWidth="3"
                  selectedTabHighlightColor="#ffffff"
                  @selectedIndexChange="indexChange">
-            <TabViewItem title="Scouting">
-                <Scouting class="bg-dark"></Scouting>
-            </TabViewItem>
+            <!--<TabViewItem title="Scouting">-->
+                <!--<Scouting class="bg-dark"></Scouting>-->
+            <!--</TabViewItem>-->
             <TabViewItem title="Robots">
                 <Robots></Robots>
             </TabViewItem>
@@ -49,11 +49,11 @@
             indexChange (e) {
                 let newIndex = e.value;
                 if (newIndex === 0) {
-                    this.title = 'Scouting';
-                } else if (newIndex === 1) {
                     this.title = 'Robots';
-                } else if (newIndex === 2) {
+                } else if (newIndex === 1) {
                     this.title = 'Stats';
+                } else if (newIndex === 2) {
+                    this.title = 'Settings';
                 } else {
                     this.title = 'Settings';
                 }

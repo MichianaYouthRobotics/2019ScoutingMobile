@@ -6,7 +6,7 @@
                          class="bg-dark"
                          @itemTap="goToRobot">
                 <v-template>
-                    <StackLayout class="item bg-dark">
+                    <StackLayout class="item bg-dark list-item">
                         <label :text="item.robot_number" class="h4 text-light"/>
                         <label :text="item.team_name" class="p text-danger"/>
                     </StackLayout>

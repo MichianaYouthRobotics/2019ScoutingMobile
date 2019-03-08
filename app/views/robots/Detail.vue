@@ -7,16 +7,55 @@
         </ActionBar>
         <ScrollView orientation="vertical">
             <StackLayout orientation="vertical">
-                <Label :text="robot.robot_number" class="text-light h1"></Label>
-                <Label :text="robot.location" class="text-info h3"></Label>
+
+
+                <FlexboxLayout flexDirection="row" justifyContent="space-between">
+                    <StackLayout>
+                        <Label :text="robot.robot_number" class="text-light h1"></Label>
+                        <Label :text="robot.location" class="text-info h3"></Label>
+                    </StackLayout>
+                    <FlexboxLayout flexDirection="column">
+                        <Label :text="fontAwesome.heart" class="fa text-right h1 text-danger"/>
+                    </FlexboxLayout>
+                </FlexboxLayout>
+
+
+
+
                 <Label :text="JSON.stringify(robot)" textWrap="true"/>
 
                 <Label text="Match Scouts" class="text-light h3"></Label>
                 <Label :text="JSON.stringify(matchScouts)" textWrap="true" />
 
 
-                <Label text="Pit Scout" class="text-light h3"></Label>
+                <Label text="Pit Scout" class="text-light h2"></Label>
                 <Label :text="JSON.stringify(pitScouts)" textWrap="true" />
+                <WrapLayout class="text-light">
+                    <Label :text="fontAwesome.snowflake" class="fa"></Label>
+                    <Label :text="pitScouts.snow_days + ' Snow Days'"></Label>
+                </WrapLayout>
+
+                <WrapLayout class="text-light">
+                    <Label v-if="pitScouts.starts_on_hab_2" :text="checkSquareO" class="fa"></Label>
+                    <Label v-else :text="checkSquareO" class="fa"></Label>
+
+                    <Label v-if="pitScouts.starts_on_hab_2" text="Starts on Hab 2"></Label>
+                    <Label v-else text="DOES NOT Start on Hab 2"></Label>
+                </WrapLayout>
+
+                <WrapLayout class="text-light">
+                    <Label v-if="pitScouts.ground_pick_cargo" :text="checkSquareO" class="fa"></Label>
+                    <Label v-else :text="checkSquareO" class="fa"></Label>
+
+                    <Label v-if="pitScouts.ground_pick_cargo" text="CAN Pickup Cargo From Ground"></Label>
+                    <Label v-else text="CANNOT Pickup Cargo From Ground"></Label>
+                </WrapLayout>
+
+                <WrapLayout class="text-light">
+                    <Label :text="fontAwesome.snowflake" class="fa"></Label>
+                    <Label :text="' ' + pitScouts.snow_days + ' Snow Days'"></Label>
+                </WrapLayout>
+
 
 
                 <Label text="Coach Scouts" class="text-light h3"></Label>

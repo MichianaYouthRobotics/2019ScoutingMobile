@@ -350,17 +350,12 @@
             matchTime: function (newVal, oldval) {
                     if (newVal === 0) {
                         this.$navigateTo(EndMatch, { clearHistory: true });
-                        // this.$navigateTo(NewCoachingScout);
                     }
                 }
         },
         mounted() {
             timerModule.setInterval(() => {
                 this.matchTime = this.matchTime - 1;
-                // if (this.matchTime === 0) {
-                //     alert('here');
-                //
-                // }
             }, 1000);
         }
     }

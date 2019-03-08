@@ -70,11 +70,17 @@ const fontAwesome = {
     mapMarker: String.fromCharCode(parseInt('f041', 16)),
     adjust: String.fromCharCode(parseInt('f042', 16)),
     tint: String.fromCharCode(parseInt('f043', 16)),
+
+    checkSquareO: String.fromCharCode(parseInt('f046', 16)),
+
     chevronRight: String.fromCharCode(parseInt('f054', 16)),
     checkCircleO: String.fromCharCode(parseInt('f05d', 16)),
     arrowUp: String.fromCharCode(parseInt('f062', 16)),
     arrowDown: String.fromCharCode(parseInt('f063', 16)),
     plus: String.fromCharCode(parseInt('f067', 16)),
+
+    squareO: String.fromCharCode(parseInt('f096', 16)),
+
     save: String.fromCharCode(parseInt('f0c7', 16)),
     floppy: String.fromCharCode(parseInt('f0c7', 16)),
     truck: String.fromCharCode(parseInt('f0d1', 16)),
@@ -93,8 +99,17 @@ const fontAwesome = {
     lifeRing: String.fromCharCode(parseInt('f1cd', 16)),
     soccer: String.fromCharCode(parseInt('f1e3', 16)),
     futbol: String.fromCharCode(parseInt('f1e3', 16)),
+    snowflake: String.fromCharCode(parseInt('f2dc', 16)),
     e: String.fromCharCode(parseInt('f044', 16)),
 
+
+    /*.fa-check-square-o:before {*/
+    /*content: "\f046";*/
+    /*}*/
+
+    /*.fa-square-o:before {*/
+    /*content: "\f096";*/
+    /*}*/
 };
 
 export default fontAwesome;
@@ -106,9 +121,7 @@ export default fontAwesome;
 /*.fa-share-square-o:before {*/
 /*content: "\f045";*/
 /*}*/
-/*.fa-check-square-o:before {*/
-/*content: "\f046";*/
-/*}*/
+
 /*.fa-arrows:before {*/
 /*content: "\f047";*/
 /*}*/
@@ -326,9 +339,7 @@ export default fontAwesome;
 /*.fa-phone:before {*/
 /*content: "\f095";*/
 /*}*/
-/*.fa-square-o:before {*/
-/*content: "\f096";*/
-/*}*/
+
 /*.fa-bookmark-o:before {*/
 /*content: "\f097";*/
 /*}*/
@@ -1985,9 +1996,7 @@ export default fontAwesome;
 /*.fa-microchip:before {*/
 /*content: "\f2db";*/
 /*}*/
-/*.fa-snowflake-o:before {*/
-/*content: "\f2dc";*/
-/*}*/
+
 /*.fa-superpowers:before {*/
 /*content: "\f2dd";*/
 /*}*/

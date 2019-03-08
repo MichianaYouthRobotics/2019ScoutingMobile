@@ -30,7 +30,7 @@ const getters = {
         return state.robots.find(robot => robot.robot_number === number)
     },
     getPitScoutsByRobotNumber: (state) => (number) => {
-        return state.pitScouts.filter(pitScout => pitScout.robot.robot_number === number)
+        return state.pitScouts.find(pitScout => pitScout.robot.robot_number === number)
     },
     getMatchScoutsByRobotNumber: (state) => (number) => {
         return state.matchScouts.filter(matchScout => matchScout.robot.robot_number === number)
