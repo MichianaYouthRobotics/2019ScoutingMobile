@@ -31,11 +31,18 @@
 
     export default {
         components: {HR},
+        props: ['robotNumber'],
+
         data() {
             return {
                 fontAwesome: fontAwesome,
                 synergyLevels: [...Array(10).keys()],
                 matchNumbers: [...Array(100).keys()],
+            }
+        },
+        computed: {
+            robot() {
+                return this.$store.getters['scouting/getRobotByNumber'](this.robotNumber);
             }
         },
         methods: {

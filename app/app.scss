@@ -65,6 +65,14 @@
 .card {
   border-radius: 30;
   padding: 30;
+  background-color: #3c495e;
+}
+
+.tiny-card {
+  border-radius: 5;
+  padding: 5;
+  background-color: #3c495e;
+  margin: 3;
 }
 
 .bg-dark {
@@ -144,29 +152,31 @@
 
 .blue-alliance {
   background-color: #497dff;
-  border-radius: 25;
+  border-radius: 10;
   border-width: 0;
-  padding: 1;
+  padding: 2 8;
   margin: 5;
   color: #ededed;
   font-family: monospace;
   text-align: center;
   font-weight: 900;
   width: auto;
+  font-size: 13;
 
 }
 
 .red-alliance {
   background-color: #d1484f;
-  border-radius: 25;
+  border-radius: 10;
   border-width: 0;
-  padding: 1;
+  padding: 2 8;
   margin: 5;
   color: #ededed;
   font-family: monospace;
   text-align: center;
   font-weight: 900;
   width: auto;
+  font-size: 13;
 
 }
 

@@ -3,6 +3,14 @@ const appSettings = require('tns-core-modules/application-settings');
 
 const namespaced = true;
 
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+
 const state = {
     eventName:'',
     eventID: '',
@@ -30,17 +38,18 @@ const getters = {
         return state.robots.find(robot => robot.robot_number === number)
     },
     getPitScoutsByRobotNumber: (state) => (number) => {
-        return state.pitScouts.find(pitScout => pitScout.robot.robot_number === number)
+        return state.pitScouts.concat(state.myPitScouts).filter(pitScout => pitScout.robot.robot_number === number)
     },
     getMatchScoutsByRobotNumber: (state) => (number) => {
-        return state.matchScouts.filter(matchScout => matchScout.robot.robot_number === number)
+        return state.matchScouts.concat(state.myMatchScouts).filter(matchScout => matchScout.robot.robot_number === number)
     },
     getCoachScoutsByRobotNumber: (state) => (number) => {
-        return state.coachScouts.filter(coachScout => coachScout.robot.robot_number === number)
+        return state.coachScouts.concat(state.myCoachScouts).filter(coachScout => coachScout.robot.robot_number === number)
     },
     todayListCount: (state) => {
         return state.todayList.length;
-    }
+    },
+
 
 };
 
@@ -98,6 +107,24 @@ const actions = {
             .then(response => {
                 context.commit("ADD_NOTE", response);
             })
+    },
+    addPitScout: (context, payload) => {
+        payload.unique_scout_key = uuidv4();
+        payload.scouter = state.myName;
+        payload.eventKey = state.eventKey;
+        context.commit("ADD_PIT_SCOUT", payload);
+    },
+    addCoachScout: (context, payload) => {
+        payload.unique_scout_key = uuidv4();
+        payload.scouter = state.myName;
+        payload.eventKey = state.eventKey;
+        context.commit("ADD_COACH_SCOUT", payload);
+    },
+    addMatchScout: (context, payload) => {
+        payload.unique_scout_key = uuidv4();
+        payload.scouter = state.myName;
+        payload.eventKey = state.eventKey;
+        context.commit("ADD_MATCH_SCOUT", payload);
     },
     getRobots: (context, payload) => {
         let url = `https://${state.server}/scout/all-robots/${state.eventID}/`;
@@ -235,6 +262,18 @@ const mutations = {
             state.coachScouts = JSON.parse(appSettings.getString("coachScouts"))
         }
 
+        if (appSettings.getString("myPitScouts")) {
+            state.myPitScouts = JSON.parse(appSettings.getString("myPitScouts"))
+        }
+
+        if (appSettings.getString("myMatchScouts")) {
+            state.myMatchScouts = JSON.parse(appSettings.getString("myMatchScouts"))
+        }
+
+        if (appSettings.getString("myCoachScouts")) {
+            state.myCoachScouts = JSON.parse(appSettings.getString("myCoachScouts"))
+        }
+
     },
     SET_EVENT_DETAILS(state, details) {
 
@@ -275,14 +314,29 @@ const mutations = {
         appSettings.setString("matchScouts", JSON.stringify(scouts));
         state.matchScouts = scouts
     },
+    ADD_MATCH_SCOUT(state, scout) {
+        state.myMatchScouts.unshift(scout);
+        appSettings.setString("myMatchScouts", JSON.stringify(state.myMatchScouts));
+
+    },
     SET_PIT_SCOUTS(state, scouts) {
         appSettings.setString("pitScouts", JSON.stringify(scouts));
         state.pitScouts = scouts
     },
+    ADD_PIT_SCOUT(state, scout) {
+        state.myPitScouts.unshift(scout);
+        appSettings.setString("myPitScouts", JSON.stringify(state.myPitScouts));
+
+    },
     SET_COACH_SCOUTS(state, scouts) {
         appSettings.setString("coachScouts", JSON.stringify(scouts));
         state.coachScouts = scouts
-    }
+    },
+    ADD_COACH_SCOUT(state, scout) {
+        state.myCoachScouts.unshift(scout);
+        appSettings.setString("myCoachScouts", JSON.stringify(state.myCoachScouts));
+
+    },
 };
 
 export default {
