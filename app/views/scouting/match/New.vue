@@ -5,13 +5,30 @@
 
 
             <StackLayout>
+                <Label :text="robot.robot_number" class="h2 text-light text-monospace"/>
+                <Label :text="robot.team_name" class="h3 text-info"/>
+                <Label text="Type Match Number" class="mt-3 label"/>
+                <TextField text="0" hint="Match Number" keyboardType="number" class="input" v-model="matchNumberValue"/>
 
-                <Label text="Robot 17" class="h1 text-light"/>
-                <Label text="Match 5" class="h3 text-light"/>
+                <HR/>
+
+                <Label text="Alliance" class="mt-3 label"/>
+                <SegmentedBar v-model="allianceValue">
+                    <SegmentedBarItem title="Blue Alliance" />
+                    <SegmentedBarItem title="Red Alliance" />
+                </SegmentedBar>
+
+                <HR/>
+
+                <Label text="Starting Hab Level" class="mt-3 label"/>
+                <SegmentedBar v-model="startPositionValue">
+                    <SegmentedBarItem title="Lvl 1" />
+                    <SegmentedBarItem title="Lvl 2" />
+                </SegmentedBar>
 
 
-                <Label text="Tap GO! when the match starts" class="h5 text-danger"></Label>
-                <FlexboxLayout class="btn-fun text-center mt-3" flexDirection="row"
+                <Label text="Tap GO! when the match starts" class="h5 mt-3 text-danger text-center"></Label>
+                <FlexboxLayout class="btn-fun text-center" flexDirection="row"
                                justifyContent="space-around" @tap="go">
                     <Label text="GO!"/>
                 </FlexboxLayout>
@@ -36,8 +53,9 @@
         data() {
             return {
                 fontAwesome: fontAwesome,
-                synergyLevels: [...Array(10).keys()],
-                matchNumbers: [...Array(100).keys()],
+                startPositionValue: 0,
+                allianceValue: 0,
+                matchNumberValue: '',
             }
         },
         computed: {
@@ -47,7 +65,13 @@
         },
         methods: {
             go () {
-                this.$navigateTo(InMatch);
+                let payload = {
+                    robot: this.robot,
+                    alliance: this.allianceValue === 0 ? "b" : "r",
+                    match_number: this.matchNumberValue,
+                    start_position: this.startPositionValue + 1,
+                };
+                this.$navigateTo(InMatch, { props: {initialPayload: payload }});
             },
         }
     }

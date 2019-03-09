@@ -1,18 +1,21 @@
 <template>
     <GridLayout rows="*">
         <StackLayout row="1">
-            <GridLayout columns="115, 115" rows="115, 115">
-                <Label text="0,0" row="0" col="0" backgroundColor="#43b883"/>
-                <Label text="0,1" row="0" col="1" backgroundColor="#1c6b48"/>
-                <Label text="1,0" row="1" col="0" backgroundColor="#289062"/>
-                <Label text="1,1" row="1" col="1" backgroundColor="#43b883"/>
-            </GridLayout>
-            <GridLayout columns="115, 115" rows="115, 115">
-                <Label text="0,0" row="0" col="0" backgroundColor="#43b883"/>
-                <Label text="0,1" row="0" col="1" backgroundColor="#1c6b48"/>
-                <Label text="1,0" row="1" col="0" backgroundColor="#289062"/>
-                <Label text="1,1" row="1" col="1" backgroundColor="#43b883"/>
-            </GridLayout>
+            <SegmentedBar v-model="listPicker">
+                <SegmentedBarItem title="Hatch Bots" />
+                <SegmentedBarItem title="Climb Bots" />
+                <ScrollView>
+                    <StackLayout>
+                        <StackLayout v-for="bot in topClimbBots">
+                            <GridLayout columns="*, auto, *"  backgroundColor="#3c495e">
+                                <Label :text="bot.robot_number" col="0" backgroundColor="#43b883"/>
+                                <Label :text="bot.avg" col="1" backgroundColor="#1c6b48"/>
+                                <Label :text="bot.total" col="2" backgroundColor="#289062"/>
+                            </GridLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </SegmentedBar>
         </StackLayout>
     </GridLayout>
 </template>
@@ -23,7 +26,8 @@
     export default {
         data() {
             return {
-                fontAwesome: fontAwesome
+                fontAwesome: fontAwesome,
+                listPicker: 0
             }
         },
         computed: {
@@ -32,6 +36,12 @@
             },
             errorMsg() {
                 return this.$store.state.scouting.errorMsg || 'NOT CONNECTED';
+            },
+            topHatchBots() {
+                return this.$store.state.scouting.topHatchBots;
+            },
+            topClimbBots() {
+                return this.$store.state.scouting.topClimbBots;
             }
         },
         methods: {

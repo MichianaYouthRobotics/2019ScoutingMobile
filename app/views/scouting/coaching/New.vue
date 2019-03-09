@@ -44,11 +44,14 @@
         },
         methods: {
             save() {
-                alert(JSON.stringify({
-                    'robot': this.robot.robot_pk,
-                    'synergy': this.synergyValue + 1,
-                    'match_number': this.matchNumberValue
-                }))
+                let payload = {
+                    "robot": this.robot,
+                    "match_number": this.matchNumberValue,
+                    "synergy": this.synergyValue + 1,
+                    "notes": "",
+                };
+                this.$store.dispatch('scouting/addCoachScout', payload);
+                this.$navigateBack();
             }
         }
     }

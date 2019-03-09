@@ -177,20 +177,6 @@
         },
         methods: {
             save() {
-                // alert(JSON.stringify({
-                //     snow_days: ,
-                //     starts_on_hab_startsOnHabTwoValue: false,
-                //     cargoInSandstormValue: false,
-                //     hatchesInSandstormValue: false,
-                //     cargoInTeleopValue: false,
-                //     hatchesInTeleopValue: false,
-                //     climbLevelValue: 0,
-                //     maxRocketLevelValue: 0,
-                //     pickupGroundCargoValue: false,
-                //     pickupGroundHatchValue: false,
-                //     ratingValue: false,
-                // }))
-
                 let payload = {
                     "robot": this.robot,
                     "snow_days": this.snowDaysValue,
@@ -211,8 +197,8 @@
                     "scouter": null,
                     "unique_scout_key": null
                 };
-                this.$store.dispatch('scouting/addPitScout', payload)
-
+                this.$store.dispatch('scouting/addPitScout', payload);
+                this.$navigateBack();
             }
         }
     }

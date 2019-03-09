@@ -1,10 +1,11 @@
-import { request, getFile, getImage, getJSON, getString } from "tns-core-modules/http";
+import {request, getFile, getImage, getJSON, getString} from "tns-core-modules/http";
+
 const appSettings = require('tns-core-modules/application-settings');
 
 const namespaced = true;
 
 function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
@@ -12,7 +13,7 @@ function uuidv4() {
 
 
 const state = {
-    eventName:'',
+    eventName: '',
     eventID: '',
     eventKey: '',
     server: '',
@@ -29,7 +30,9 @@ const state = {
     pitScouts: [],
     myPitScouts: [],
     coachScouts: [],
-    myCoachScouts: []
+    myCoachScouts: [],
+    topClimbBots: [],
+    topHatchBots: [],
 };
 
 // getters
@@ -62,13 +65,13 @@ const actions = {
         let url = `https://${payload.server}/scout/event/${payload.id}/`;
         console.log('CONNECTING TO: ' + url);
         request({
-                url: url,
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                content: JSON.stringify({
-                    key: payload.key,
-                })
+            url: url,
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            content: JSON.stringify({
+                key: payload.key,
             })
+        })
             .then(response => {
                 let data = JSON.parse(response.content);
                 if (data.error) {
@@ -84,7 +87,7 @@ const actions = {
                     context.commit("SET_EVENT_DETAILS", details);
                 }
             }).catch(e => {
-                context.commit("SET_CONNECTION_ERROR_MESSAGE", e.toString());
+            context.commit("SET_CONNECTION_ERROR_MESSAGE", e.toString());
         });
     },
     reset: (context, payload) => {
@@ -92,10 +95,19 @@ const actions = {
     },
 
     sync: (context, payload) => {
+
+        actions.syncMatchScouts(context);
+        actions.syncPitScouts(context);
+        actions.syncCoachScouts(context);
+
         actions.getRobots(context);
         actions.getMatchScouts(context);
         actions.getPitScouts(context);
         actions.getCoachScouts(context);
+
+        actions.getTopClimbBots(context);
+        actions.getTopHatchBots(context);
+
     },
     addNote: (context, payload) => {
         let newNote = {
@@ -111,28 +123,105 @@ const actions = {
     addPitScout: (context, payload) => {
         payload.unique_scout_key = uuidv4();
         payload.scouter = state.myName;
-        payload.eventKey = state.eventKey;
+        payload.key = state.eventKey;
         context.commit("ADD_PIT_SCOUT", payload);
+    },
+    pushPitScout: (context, payload) => {
+        let url = `https://${state.server}/scout/pit/sync/${state.eventID}/`;
+        console.log('PUSHING A PIT SCOUT TO: ' + url);
+        request({
+            url: url,
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            content: JSON.stringify(payload)
+        })
+            .then(response => {
+                let data = JSON.parse(response.content);
+                if (data.status === 'OK') {
+                    context.commit("CLEAR_THIS_PIT_SCOUT", payload.unique_scout_key);
+                } else if (data.error) {
+                    console.log('PUSH PIT SCOUT ERROR: ' + data.error);
+                }
+            }).catch(e => {
+            console.log('CATCH PUSH PIT SCOUT ERROR: ' + e.toString());
+
+        });
+    },
+    syncPitScouts: (context, payload) => {
+        for (let i = 0; i < state.myPitScouts.length; i++) {
+            actions.pushPitScout(context, state.myPitScouts[i]);
+        }
     },
     addCoachScout: (context, payload) => {
         payload.unique_scout_key = uuidv4();
         payload.scouter = state.myName;
-        payload.eventKey = state.eventKey;
+        payload.key = state.eventKey;
         context.commit("ADD_COACH_SCOUT", payload);
+    },
+    pushCoachScout: (context, payload) => {
+        let url = `https://${state.server}/scout/coach/sync/${state.eventID}/`;
+        console.log('PUSHING A COACH SCOUT TO: ' + url);
+        request({
+            url: url,
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            content: JSON.stringify(payload)
+        })
+            .then(response => {
+                let data = JSON.parse(response.content);
+                if (data.status === 'OK') {
+                    context.commit("CLEAR_THIS_COACH_SCOUT", payload.unique_scout_key);
+                } else if (data.error) {
+                    console.log('PUSH COACH SCOUT ERROR: ' + data.error);
+                }
+            }).catch(e => {
+            console.log('CATCH PUSH COACH SCOUT ERROR: ' + e.toString());
+        });
+    },
+    syncCoachScouts: (context, payload) => {
+        for (let i = 0; i < state.myCoachScouts.length; i++) {
+            actions.pushCoachScout(context, state.myCoachScouts[i]);
+        }
     },
     addMatchScout: (context, payload) => {
         payload.unique_scout_key = uuidv4();
         payload.scouter = state.myName;
-        payload.eventKey = state.eventKey;
+        payload.key = state.eventKey;
         context.commit("ADD_MATCH_SCOUT", payload);
+    },
+    pushMatchScout: (context, payload) => {
+        let url = `https://${state.server}/scout/match/sync/${state.eventID}/`;
+        console.log('PUSHING A MATCH SCOUT TO: ' + url);
+        request({
+            url: url,
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            content: JSON.stringify(payload)
+        })
+            .then(response => {
+                let data = JSON.parse(response.content);
+                if (data.status === 'OK') {
+                    context.commit("CLEAR_THIS_MATCH_SCOUT", payload.unique_scout_key);
+                } else if (data.error) {
+                    console.log('PUSH MATCH SCOUT ERROR: ' + data.error);
+                }
+            }).catch(e => {
+            console.log('CATCH PUSH MATCH SCOUT ERROR: ' + e.toString());
+        });
+    },
+    syncMatchScouts: (context, payload) => {
+        for (let i = 0; i < state.myMatchScouts.length; i++) {
+            actions.pushMatchScout(context, state.myMatchScouts[i]);
+        }
     },
     getRobots: (context, payload) => {
         let url = `https://${state.server}/scout/all-robots/${state.eventID}/`;
         console.log('GETTING ROBOTS FROM: ' + url);
         request({
             url: url,
-            method:'GET',
-            headers: { "Content-Type": "application/json" },})
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
             .then(response => {
                 console.log('GOT ROBOTS FROM:' + url);
                 let data = JSON.parse(response.content);
@@ -141,10 +230,12 @@ const actions = {
     },
     getMatches: (context, payload) => {
         let url = `https://${state.server}/scout/match/list/`;
+        console.log('GETTING MATCHES FROM: ' + url);
         request({
             url: url,
-            method:'GET',
-            headers: { "Content-Type": "application/json" },})
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
             .then(response => {
                 let data = JSON.parse(response.content);
                 context.commit("SET_MATCHES", data);
@@ -152,10 +243,12 @@ const actions = {
     },
     getPitScouts: (context, payload) => {
         let url = `https://${state.server}/scout/pit/list/${state.eventID}/`;
+        console.log('GETTING PIT SCOUTS FROM: ' + url);
         request({
             url: url,
-            method:'GET',
-            headers: { "Content-Type": "application/json" },})
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
             .then(response => {
                 let data = JSON.parse(response.content);
                 context.commit("SET_PIT_SCOUTS", data);
@@ -163,10 +256,12 @@ const actions = {
     },
     getCoachScouts: (context, payload) => {
         let url = `https://${state.server}/scout/coach/list/${state.eventID}/`;
+        console.log('GETTING COACH SCOUTS FROM: ' + url);
         request({
             url: url,
-            method:'GET',
-            headers: { "Content-Type": "application/json" },})
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
             .then(response => {
                 let data = JSON.parse(response.content);
                 context.commit("SET_COACH_SCOUTS", data);
@@ -174,13 +269,41 @@ const actions = {
     },
     getMatchScouts: (context, payload) => {
         let url = `https://${state.server}/scout/match/list/${state.eventID}/`;
+        console.log('GETTING MATCH SCOUTS FROM: ' + url);
         request({
             url: url,
-            method:'GET',
-            headers: { "Content-Type": "application/json" },})
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
             .then(response => {
                 let data = JSON.parse(response.content);
                 context.commit("SET_MATCH_SCOUTS", data);
+            })
+    },
+    getTopClimbBots: (context, payload) => {
+        let url = `https://${state.server}/scout/best-robots/climb/`;
+        console.log('GETTING TOP CLIMB BOTS FROM: ' + url);
+        request({
+            url: url,
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
+            .then(response => {
+                let data = JSON.parse(response.content);
+                context.commit("SET_TOP_CLIMB_BOTS", data);
+            })
+    },
+    getTopHatchBots: (context, payload) => {
+        let url = `https://${state.server}/scout/best-robots/hatch/`;
+        console.log('GETTING TOP HATCH BOTS FROM: ' + url);
+        request({
+            url: url,
+            method: 'GET',
+            headers: {"Content-Type": "application/json"},
+        })
+            .then(response => {
+                let data = JSON.parse(response.content);
+                context.commit("SET_TOP_HATCH_BOTS", data);
             })
     },
 };
@@ -230,6 +353,24 @@ const mutations = {
         appSettings.setString("coachScouts", JSON.stringify([]));
         console.log('RESET COACH SCOUTS');
 
+        state.myMatchScouts = [];
+        appSettings.setString("myMatchScouts", JSON.stringify([]));
+        console.log('RESET MY MATCH SCOUTS');
+
+        state.myPitScouts = [];
+        appSettings.setString("myPitScouts", JSON.stringify([]));
+        console.log('RESET MY PIT SCOUTS');
+
+        state.myCoachScouts = [];
+        appSettings.setString("myCoachScouts", JSON.stringify([]));
+        console.log('RESET MY COACH SCOUTS');
+
+        state.topHatchBots = [];
+        appSettings.setString("topHatchBots", JSON.stringify([]));
+
+        state.topClimbBots = [];
+        appSettings.setString("topClimbBots", JSON.stringify([]));
+
     },
     SET_MY_NAME(state, myName) {
         state.myName = myName
@@ -274,6 +415,14 @@ const mutations = {
             state.myCoachScouts = JSON.parse(appSettings.getString("myCoachScouts"))
         }
 
+        if (appSettings.getString("topHatchBots")) {
+            state.topHatchBots = JSON.parse(appSettings.getString("topHatchBots"))
+        }
+
+        if (appSettings.getString("topClimbBots")) {
+            state.topClimbBots = JSON.parse(appSettings.getString("topClimbBots"))
+        }
+
     },
     SET_EVENT_DETAILS(state, details) {
 
@@ -298,7 +447,6 @@ const mutations = {
 
     },
     SET_CONNECTION_ERROR_MESSAGE(state, errorMsg) {
-        // alert(errorMsg);
         state.connected = false;
         appSettings.setBoolean("connected", false);
         state.errorMsg = errorMsg;
@@ -337,6 +485,33 @@ const mutations = {
         appSettings.setString("myCoachScouts", JSON.stringify(state.myCoachScouts));
 
     },
+    CLEAR_THIS_PIT_SCOUT(state, key) {
+        let foundIndex = state.myPitScouts.findIndex(PitScout => PitScout.unique_scout_key === key);
+        console.log("FOUND PIT INDEX " + foundIndex);
+        state.myPitScouts.splice(foundIndex, 1);
+        appSettings.setString("myPitScouts", JSON.stringify(state.myPitScouts));
+    },
+    CLEAR_THIS_MATCH_SCOUT(state, key) {
+        let foundIndex = state.myMatchScouts.findIndex(matchScout => matchScout.unique_scout_key === key);
+        console.log("FOUND MATCH INDEX " + foundIndex);
+        state.myMatchScouts.splice(foundIndex, 1);
+        appSettings.setString("myMatchScouts", JSON.stringify(state.myMatchScouts));
+    },
+    CLEAR_THIS_COACH_SCOUT(state, key) {
+        let foundIndex = state.myCoachScouts.findIndex(coachScout => coachScout.unique_scout_key === key);
+        console.log("FOUND COACH INDEX " + foundIndex);
+        state.myCoachScouts.splice(foundIndex, 1);
+        appSettings.setString("myCoachScouts", JSON.stringify(state.myCoachScouts));
+    },
+    SET_TOP_HATCH_BOTS(state, bots) {
+        appSettings.setString("topHatchBots", JSON.stringify(bots));
+        state.topHatchBots = bots
+    },
+    SET_TOP_CLIMB_BOTS(state, bots) {
+        appSettings.setString("topClimbBots", JSON.stringify(bots));
+        state.topClimbBOts = bots
+    },
+
 };
 
 export default {

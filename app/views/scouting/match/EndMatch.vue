@@ -7,7 +7,7 @@
             <StackLayout>
 
                 <Label text="Hab Level" class="mt-3 label"/>
-                <SegmentedBar class="mx-1">
+                <SegmentedBar class="mx-1" v-model="habLevelValue">
                     <SegmentedBarItem title="0"/>
                     <SegmentedBarItem title="1"/>
                     <SegmentedBarItem title="2"/>
@@ -16,8 +16,8 @@
 
                 <HR/>
 
-                <Label text="Robot Speed" class="mt-3 label"/>
-                <SegmentedBar class="mx-1">
+                <Label text="Rate the Robot's Speed" class="mt-3 label"/>
+                <SegmentedBar class="mx-1" v-model="speedValue">
                     <SegmentedBarItem title="1"/>
                     <SegmentedBarItem title="2"/>
                     <SegmentedBarItem title="3"/>
@@ -27,8 +27,8 @@
 
                 <HR/>
 
-                <Label text="Team Work" class="mt-3 label"/>
-                <SegmentedBar class="mx-1">
+                <Label text="Rate the Robot's Team Work" class="mt-3 label"/>
+                <SegmentedBar class="mx-1" v-model="teamWorkValue">
                     <SegmentedBarItem title="1"/>
                     <SegmentedBarItem title="2"/>
                     <SegmentedBarItem title="3"/>
@@ -38,8 +38,8 @@
 
                 <HR/>
 
-                <Label text="Strategy" class="mt-3 label"/>
-                <SegmentedBar class="mx-1">
+                <Label text="Rate the Robot's Strategy" class="mt-3 label"/>
+                <SegmentedBar class="mx-1" v-model="strategyValue">
                     <SegmentedBarItem title="1"/>
                     <SegmentedBarItem title="2"/>
                     <SegmentedBarItem title="3"/>
@@ -52,7 +52,7 @@
                 <FlexboxLayout flexDirection="row" justifyContent="space-between" alignItems="center"
                                alignContent="center">
                     <Label text="Good Robot?" class="label"/>
-                    <Switch checked="true"/>
+                    <Switch checked="true" v-model="goodRobotValue"/>
                 </FlexboxLayout>
 
                 <FlexboxLayout class="btn-fun text-center mt-3" flexDirection="row"
@@ -72,15 +72,27 @@
 
     export default {
         components: {HR},
+        props: ['initialPayload'],
+
         data() {
             return {
                 fontAwesome: fontAwesome,
-                synergyLevels: [...Array(10).keys()],
-                matchNumbers: [...Array(100).keys()],
+                habLevelValue: 0,
+                speedValue: 0,
+                teamWorkValue: 0,
+                strategyValue: 0,
+                goodRobotValue: true,
             }
         },
         methods: {
             save() {
+                let payload = this.initialPayload;
+                payload.speed = this.speedValue + 1;
+                payload.hab_level = this.habLevelValue + 1;
+                payload.strategy = this.strategyValue + 1;
+                payload.team_work = this.teamWorkValue + 1;
+                payload.recommend = this.goodRobotValue;
+                this.$store.dispatch('scouting/addMatchScout', payload);
                 this.$navigateTo(App, { clearHistory: true });
             }
         }

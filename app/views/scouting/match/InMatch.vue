@@ -7,13 +7,14 @@
                     <StackLayout>
                         <Label :text="matchTime" class="giant text-light"></Label>
                         <Label :text="prettyTime" class="h2 text-info"></Label>
-                        <Label text="SANDSTORM" class="h5 text-monospace"/>
+                        <Label v-if="(150 - matchTime) <= 15" text="SANDSTORM" class="h5 text-monospace"/>
+                        <Label v-else text="TELEOP" class="h5 text-monospace"/>
                     </StackLayout>
                     <FlexboxLayout flexDirection="column">
-                        <Label text="1009" class="text-right h1 text-light"/>
-                        <Label text="Pull me to the right" class="text-right h3 text-danger"/>
-                        <Label text="blue alliance" class="blue-alliance"/>
-                        <Label text="red alliance" class="red-alliance"/>
+                        <Label :text="initialPayload.robot.robot_number" class="text-right h1 text-light"/>
+                        <Label :text="initialPayload.robot.team_name" class="text-right h3 text-danger"/>
+                        <Label v-if="initialPayload.alliance === 'b'" text="blue alliance" class="blue-alliance"/>
+                        <Label v-else text="red alliance" class="red-alliance"/>
                     </FlexboxLayout>
                 </FlexboxLayout>
 
@@ -118,6 +119,7 @@
 
     export default {
         components: {HR},
+        props: ['initialPayload'],
         data() {
             return {
                 fontAwesome: fontAwesome,
@@ -127,7 +129,7 @@
                 hasCargo: false,
                 totalCargo: 0,
                 totalHatch: 0,
-                matchTime: 10,
+                matchTime: 150,
                 actions: []
             }
         },
@@ -349,7 +351,12 @@
         watch: {
             matchTime: function (newVal, oldval) {
                     if (newVal === 0) {
-                        this.$navigateTo(EndMatch, { clearHistory: true });
+
+                        let payload = this.initialPayload;
+                        payload.hatch_count = this.totalHatch;
+                        payload.cargo_count = this.totalCargo;
+                        payload.actions = this.actions;
+                        this.$navigateTo(EndMatch, { clearHistory: true , props: {initialPayload: payload}});
                     }
                 }
         },
